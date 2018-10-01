@@ -1,6 +1,6 @@
 ## Stack Calculator
 
-A Reverse Polish Notation (RPN) Calculator build with React Native
+A Reverse Polish Notation (RPN) Calculator built with React Native
 
 ### Getting Started
 
