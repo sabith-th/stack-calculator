@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity,
+  StyleSheet, Text, View, TouchableOpacity, Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as Animatable from 'react-native-animatable';
 import Button from './Button';
 import {
   pressNum, enter, operation, clear, swap, toggleNegative,
@@ -19,11 +20,15 @@ const baseNumber = {
 };
 
 const styles = StyleSheet.create({
+  bottomBorder: {
+    borderBottomWidth: 1,
+    borderColor: '#fff',
+  },
   container: {
     flex: 1,
   },
   top: {
-    paddingTop: 20,
+    paddingTop: Platform.OS === 'ios' ? 32 : 20,
   },
   bottom: {
     flex: 1,
@@ -48,60 +53,102 @@ const styles = StyleSheet.create({
   },
 });
 
-export const App = ({
-  calculatorState: { stack, inputState },
-  pressNumWithDispatch,
-  enterAction,
-  operationAction,
-  clearAction,
-  swapAction,
-  toggleNegativeAction,
-}) => (
-  <View style={styles.container}>
-    <View style={styles.top}>
-      <TouchableOpacity onPress={() => toggleNegativeAction(2)}>
-        <Text style={styles.append}>{stack[2] || 0}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => toggleNegativeAction(1)}>
-        <Text style={styles.append}>{stack[1] || 0}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => toggleNegativeAction(0)}>
-        <Text style={styles[inputState]}>{stack[0] || 0}</Text>
-      </TouchableOpacity>
-    </View>
-    <View style={styles.bottom}>
-      <View style={styles.row}>
-        <Button text="C" onPress={clearAction} />
-        <Button text="Pow" onPress={operationAction} />
-        <Button text="Swap" onPress={swapAction} />
-        <Button text="/" onPress={operationAction} />
+export class App extends React.Component {
+  render() {
+    const {
+      calculatorState: { stack, inputState },
+      pressNumWithDispatch,
+      enterAction,
+      operationAction,
+      clearAction,
+      swapAction,
+      toggleNegativeAction,
+    } = this.props;
+    return (
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <TouchableOpacity style={styles.bottomBorder} onPress={() => toggleNegativeAction(2)}>
+            <Text style={styles.append}>{stack[2] || 0}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bottomBorder} onPress={() => toggleNegativeAction(1)}>
+            <Text style={styles.append}>{stack[1] || 0}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleNegativeAction(0)}>
+            <Animatable.Text
+              ref={(ref) => {
+                this.text0 = ref;
+              }}
+              style={styles[inputState]}
+            >
+              {stack[0] || 0}
+            </Animatable.Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bottom}>
+          <View style={styles.row}>
+            <Button text="C" onPress={clearAction} />
+            <Button
+              text="Pow"
+              onPress={(x) => {
+                operationAction(x);
+                this.text0.slideInDown(500);
+              }}
+            />
+            <Button text="Swap" onPress={swapAction} />
+            <Button
+              text="/"
+              onPress={(x) => {
+                operationAction(x);
+                this.text0.slideInDown(500);
+              }}
+            />
+          </View>
+          <View style={styles.row}>
+            <Button text="9" onPress={pressNumWithDispatch} />
+            <Button text="8" onPress={pressNumWithDispatch} />
+            <Button text="7" onPress={pressNumWithDispatch} />
+            <Button
+              text="X"
+              onPress={(x) => {
+                operationAction(x);
+                this.text0.slideInDown(500);
+              }}
+            />
+          </View>
+          <View style={styles.row}>
+            <Button text="6" onPress={pressNumWithDispatch} />
+            <Button text="5" onPress={pressNumWithDispatch} />
+            <Button text="4" onPress={pressNumWithDispatch} />
+            <Button
+              text="-"
+              onPress={(x) => {
+                operationAction(x);
+                this.text0.slideInDown(500);
+              }}
+            />
+          </View>
+          <View style={styles.row}>
+            <Button text="3" onPress={pressNumWithDispatch} />
+            <Button text="2" onPress={pressNumWithDispatch} />
+            <Button text="1" onPress={pressNumWithDispatch} />
+            <Button
+              text="+"
+              onPress={(x) => {
+                operationAction(x);
+                this.text0.slideInDown(500);
+              }}
+            />
+          </View>
+          <View style={styles.row}>
+            <Button text="0" onPress={pressNumWithDispatch} />
+            <Button text="." onPress={pressNumWithDispatch} />
+            <Button text="Enter" special onPress={enterAction} />
+          </View>
+        </View>
       </View>
-      <View style={styles.row}>
-        <Button text="9" onPress={pressNumWithDispatch} />
-        <Button text="8" onPress={pressNumWithDispatch} />
-        <Button text="7" onPress={pressNumWithDispatch} />
-        <Button text="X" onPress={operationAction} />
-      </View>
-      <View style={styles.row}>
-        <Button text="6" onPress={pressNumWithDispatch} />
-        <Button text="5" onPress={pressNumWithDispatch} />
-        <Button text="4" onPress={pressNumWithDispatch} />
-        <Button text="-" onPress={operationAction} />
-      </View>
-      <View style={styles.row}>
-        <Button text="3" onPress={pressNumWithDispatch} />
-        <Button text="2" onPress={pressNumWithDispatch} />
-        <Button text="1" onPress={pressNumWithDispatch} />
-        <Button text="+" onPress={operationAction} />
-      </View>
-      <View style={styles.row}>
-        <Button text="0" onPress={pressNumWithDispatch} />
-        <Button text="." onPress={pressNumWithDispatch} />
-        <Button text="Enter" special onPress={enterAction} />
-      </View>
-    </View>
-  </View>
-);
+    );
+  }
+}
 
 export default connect(
   state => ({ calculatorState: state }),
