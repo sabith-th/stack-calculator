@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "stack-calculator",
-    "description": "This project is really great.",
+    "name": "Stack Calculator",
+    "description": "A Reverse Polish Notation (RPN) Calculator",
     "slug": "stack-calculator",
     "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Calculator-Icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,11 +17,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.sabith.stackcalculator"
     }
   }
 }

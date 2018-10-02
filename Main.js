@@ -68,10 +68,16 @@ export class App extends React.Component {
       <View style={styles.container}>
         <View style={styles.top}>
           <TouchableOpacity style={styles.bottomBorder} onPress={() => toggleNegativeAction(2)}>
-            <Text style={styles.append}>{stack[2] || 0}</Text>
+            <Text numberOfLines={1} style={styles.append}>
+              {'  '}
+              {stack[2] || 0}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bottomBorder} onPress={() => toggleNegativeAction(1)}>
-            <Text style={styles.append}>{stack[1] || 0}</Text>
+            <Text numberOfLines={1} style={styles.append}>
+              {'  '}
+              {stack[1] || 0}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => toggleNegativeAction(0)}>
             <Animatable.Text
@@ -79,7 +85,9 @@ export class App extends React.Component {
                 this.text0 = ref;
               }}
               style={styles[inputState]}
+              numberOfLines={1}
             >
+              {'  '}
               {stack[0] || 0}
             </Animatable.Text>
           </TouchableOpacity>
